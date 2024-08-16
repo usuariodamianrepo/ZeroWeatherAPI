@@ -1,0 +1,2 @@
+# ZeroWeatherAPI
+Example Rest API
