@@ -1,8 +1,6 @@
-﻿using ZeroWeatherAPI.Core.Interfaces;
-
-namespace ZeroWeatherAPI.Core.Dtos
+﻿namespace ZeroWeatherAPI.Core.Dtos
 {
-    public class StoredProcedureDto : IStoredProcedure
+    public class StoredProcedureDto
     {
         public string Query => "[dbo].[sp_GetWeathersByCity] @CityId";
 

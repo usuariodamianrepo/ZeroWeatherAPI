@@ -4,6 +4,6 @@ namespace ZeroWeatherAPI.Core.Interfaces.Services
 {
     public interface IStoredProcedureService
     {
-        IEnumerable<StoredProcedureDto> GetAll(int cityId);
+        IEnumerable<StoredProcedureDto> GetById(int cityId);
     }
 }

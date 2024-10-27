@@ -12,16 +12,9 @@ namespace ZeroWeatherAPI.Services
             _unitOfWork = unitOfWork;
         }
         
-        public IEnumerable<StoredProcedureDto> GetAll(int cityId)
+        public IEnumerable<StoredProcedureDto> GetById(int cityId)
         {
-            var stored = _unitOfWork.StoredProcedureRepository;
-
-            var parameters = new object[1];
-            parameters[0] = stored.GetSqlParameter("@cityId", cityId);
-
-            IList<StoredProcedureDto> queryResults = stored.ExecuteStoredProcedure<StoredProcedureDto>(parameters).ToList();
-
-            return queryResults;
+            return _unitOfWork.StoredProcedureDtoRpt(cityId);
         }
     }
 }

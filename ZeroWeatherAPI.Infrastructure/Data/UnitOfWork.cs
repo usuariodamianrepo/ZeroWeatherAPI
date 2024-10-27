@@ -1,4 +1,6 @@
-﻿using ZeroWeatherAPI.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ZeroWeatherAPI.Core.Dtos;
+using ZeroWeatherAPI.Core.Interfaces;
 using ZeroWeatherAPI.Core.Interfaces.Repositories;
 using ZeroWeatherAPI.Infrastructure.Repositories;
 
@@ -9,7 +11,6 @@ namespace ZeroWeatherAPI.Infrastructure.Data
         private readonly AppDbContext _context;
         private CityRepository _cityRepository;
         private WeatherRepository _weatherRepository;
-        private StoredProcedureRepository _storedProcedureRepository;
 
         public UnitOfWork(AppDbContext context)
         {
@@ -18,7 +19,6 @@ namespace ZeroWeatherAPI.Infrastructure.Data
 
         public ICityRepository CityRepository => _cityRepository ??= new CityRepository(_context);
         public IWeatherRepository WeatherRepository => _weatherRepository ??= new WeatherRepository(_context);
-        public IStoredProcedureRepository StoredProcedureRepository => _storedProcedureRepository ??= new StoredProcedureRepository(_context);
 
         public async Task<int> CommitAsync()
         {
@@ -28,6 +28,11 @@ namespace ZeroWeatherAPI.Infrastructure.Data
         public void Dispose()
         {
             _context.Dispose();
+        }
+
+        public IEnumerable<StoredProcedureDto> StoredProcedureDtoRpt(int id)
+        {
+            return _context.Database.SqlQuery<StoredProcedureDto>($"exec sp_GetWeathersByCity @CityId={id}").ToList();
         }
     }
 }

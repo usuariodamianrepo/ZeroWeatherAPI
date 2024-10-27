@@ -26,7 +26,6 @@ namespace ZeroWeatherAPI.Web.Extensions
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(ICityRepository), typeof(CityRepository));
             services.AddScoped(typeof(IWeatherRepository), typeof(WeatherRepository));
-            services.AddScoped(typeof(IStoredProcedureRepository), typeof(StoredProcedureRepository));
 
             services.AddScoped(typeof(ICityService), typeof(CityService));
             services.AddScoped(typeof(IWeatherService), typeof(WeatherService));

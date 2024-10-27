@@ -1,4 +1,5 @@
-﻿using ZeroWeatherAPI.Core.Interfaces.Repositories;
+﻿using ZeroWeatherAPI.Core.Dtos;
+using ZeroWeatherAPI.Core.Interfaces.Repositories;
 
 namespace ZeroWeatherAPI.Core.Interfaces
 {
@@ -6,8 +7,9 @@ namespace ZeroWeatherAPI.Core.Interfaces
     {
         ICityRepository CityRepository { get; }
         IWeatherRepository WeatherRepository { get; }
-        IStoredProcedureRepository StoredProcedureRepository { get; }
 
         Task<int> CommitAsync();
+
+        IEnumerable<StoredProcedureDto> StoredProcedureDtoRpt(int id);
     }
 }

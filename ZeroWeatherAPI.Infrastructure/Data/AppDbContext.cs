@@ -7,7 +7,6 @@ namespace ZeroWeatherAPI.Infrastructure.Data
     {
         public DbSet<City> Cities { get; set; }
         public DbSet<Weather> Weathers { get; set; }
-        public DbSet<Core.Dtos.StoredProcedureDto> StoredProcedureDtos { get; set; } = null!;
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

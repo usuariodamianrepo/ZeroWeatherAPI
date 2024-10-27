@@ -18,7 +18,7 @@ namespace ZeroWeatherAPI.Web.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<StoredProcedureDto>> Get(int id)
         {
-            var result = _storedProcedureService.GetAll(id);
+            var result = _storedProcedureService.GetById(id);
 
             return Ok(result);
         }
