@@ -25,11 +25,6 @@ namespace ZeroWeatherAPI.Infrastructure.Data
             return await _context.SaveChangesAsync();
         }
 
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
-
         public IEnumerable<StoredProcedureDto> StoredProcedureDtoRpt(int id)
         {
             return _context.Database.SqlQuery<StoredProcedureDto>($"exec sp_GetWeathersByCity @CityId={id}").ToList();

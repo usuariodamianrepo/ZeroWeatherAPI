@@ -3,7 +3,7 @@ using ZeroWeatherAPI.Core.Interfaces.Repositories;
 
 namespace ZeroWeatherAPI.Core.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         ICityRepository CityRepository { get; }
         IWeatherRepository WeatherRepository { get; }
