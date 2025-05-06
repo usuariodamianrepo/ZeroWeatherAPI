@@ -20,7 +20,6 @@ namespace ZeroWeatherAPI.Services
         public async Task<Weather> CreateWeather(Weather newWeather)
         {
             WeatherValidator validator = new();
-            newWeather.InsertDate = DateTime.Now;
 
             var validationResult = await validator.ValidateAsync(newWeather);
             if (validationResult.IsValid)
@@ -69,6 +68,7 @@ namespace ZeroWeatherAPI.Services
             if (weatherToBeUpdated == null)
                 throw new ArgumentException("Invalid Weather ID while updating");
 
+            weatherToBeUpdated.UpdateAudit();
             weatherToBeUpdated.CityId = newWeatherValues.CityId;
             weatherToBeUpdated.CoordLon = newWeatherValues.CoordLon;
             weatherToBeUpdated.CoordLat = newWeatherValues.CoordLat;

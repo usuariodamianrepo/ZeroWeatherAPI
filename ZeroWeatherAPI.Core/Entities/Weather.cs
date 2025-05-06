@@ -1,10 +1,7 @@
 ﻿namespace ZeroWeatherAPI.Core.Entities
 {
-    public class Weather
+    public class Weather: EntityBase
     {
-        public int Id { get; set; }
-        public DateTime InsertDate { get; set; }
-        public DateTime? UpdateDate { get; set; }
         public int CityId { get; set; }
 
         public double CoordLon { get; set; }

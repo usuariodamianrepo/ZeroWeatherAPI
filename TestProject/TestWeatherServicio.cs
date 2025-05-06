@@ -27,8 +27,6 @@ namespace TestProject
             _weather = new ZeroWeatherAPI.Core.Entities.Weather()
             {
                 Id = _Id,
-                InsertDate = DateTime.Now.AddHours(-1),
-                UpdateDate = null,
                 CityId = 1,
                 CoordLon = 12.03,
                 CoordLat = 22.01,
@@ -67,8 +65,6 @@ namespace TestProject
             _city = new City()
             {
                 Id = 22,
-                InsertDate = DateTime.Now,
-                UpdateDate = null,
                 Name = "San Nicolas",
                 Description = "description",
                 Latitude = 33,

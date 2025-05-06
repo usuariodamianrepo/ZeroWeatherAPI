@@ -16,7 +16,7 @@ namespace ZeroWeatherAPI.Services
         public async Task<City> CreateCity(City newCity)
         {
             CityValidator validator = new();
-            newCity.InsertDate = DateTime.Now;
+            //newCity.InsertDate = DateTime.Now;
 
             var validationResult = await validator.ValidateAsync(newCity);
             if (validationResult.IsValid)
@@ -65,7 +65,7 @@ namespace ZeroWeatherAPI.Services
             if (cityToBeUpdated == null)
                 throw new ArgumentException("Invalid City ID while updating");
 
-            cityToBeUpdated.UpdateDate = DateTime.Now;
+            cityToBeUpdated.UpdateAudit();
             cityToBeUpdated.Name = newCityValues.Name;
             cityToBeUpdated.Description = newCityValues.Description;
             cityToBeUpdated.Latitude = newCityValues.Latitude;
