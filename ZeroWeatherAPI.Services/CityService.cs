@@ -58,6 +58,7 @@ namespace ZeroWeatherAPI.Services
                 throw new ArgumentException(validationResult.Errors.ToString());
 
             City cityToBeUpdated = await _unitOfWork.CityRepository.GetByIdAsync(cityToBeUpdatedId);
+            _unitOfWork.CityRepository.Update(cityToBeUpdated);
             cityToBeUpdated.UpdateAudit();
             cityToBeUpdated.Name = newCityValues.Name;
             cityToBeUpdated.Description = newCityValues.Description;

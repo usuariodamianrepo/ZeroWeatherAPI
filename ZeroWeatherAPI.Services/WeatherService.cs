@@ -61,6 +61,7 @@ namespace ZeroWeatherAPI.Services
                 throw new ArgumentException(validationResult.Errors.ToString());
 
             Weather weatherToBeUpdated = await _unitOfWork.WeatherRepository.GetByIdAsync(weatherToBeUpdatedId);
+            _unitOfWork.WeatherRepository.Update(weatherToBeUpdated);
             weatherToBeUpdated.UpdateAudit();
             weatherToBeUpdated.CityId = newWeatherValues.CityId;
             weatherToBeUpdated.CoordLon = newWeatherValues.CoordLon;
@@ -93,7 +94,6 @@ namespace ZeroWeatherAPI.Services
             weatherToBeUpdated.OpenWeatherId = newWeatherValues.OpenWeatherId;
             weatherToBeUpdated.Name = newWeatherValues.Name;
             weatherToBeUpdated.Cod = newWeatherValues.Cod;
-
 
             await _unitOfWork.CommitAsync();
 
