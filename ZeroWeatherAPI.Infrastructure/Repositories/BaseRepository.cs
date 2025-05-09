@@ -31,45 +31,67 @@ namespace ZeroWeatherAPI.Infrastructure.Repositories
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAsync(
-            Expression<Func<TEntity, bool>> filter = null, 
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
+        public virtual async Task<IEnumerable<TEntity>> GetByFilterAsync(
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>,IOrderedQueryable<TEntity>>? orderBy = null, 
             string includeProperties = "",
             bool tracked = false,
             int take = 0
             )
         {
-            IQueryable<TEntity> query = _dbSet;
-
-            if (tracked)
-            {
-                query = _dbSet;
-            }
-            else
-            {
-                query = _dbSet.AsNoTracking();
-            }
+            IQueryable<TEntity> query = tracked ? _dbSet : _dbSet.AsNoTracking();
 
             if (filter != null)
                 query = query.Where(filter);
 
-            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            if (!string.IsNullOrWhiteSpace(includeProperties))
             {
-                query = query.Include(includeProperty);
+                foreach (var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
             }
 
-            if(take > 0)
+            if (take > 0)
                 query = query.Take(take);
 
-            if (orderBy != null)
-                return await orderBy(query).ToListAsync();
-
-            return await query.ToListAsync();
+            return orderBy != null ? await orderBy(query).ToListAsync() : await query.ToListAsync();
         }
 
-        public virtual async ValueTask<TEntity> GetByIdAsync(int id)
+        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.FindAsync(id);
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return await _dbSet.SingleOrDefaultAsync(predicate);
+        }
+
+        public virtual async Task<TEntity> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id) ?? throw new InvalidOperationException($"No {typeof(TEntity).Name} found with ID: {id}");
+        }
+
+        public virtual async Task<(IEnumerable<TEntity> Items, int TotalCount)> GetPagedAsync(
+            int pageNumber,
+            int pageSize,
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            string includeProperties = "",
+            bool tracked = false)
+        {
+            IQueryable<TEntity> query = tracked ? _dbSet : _dbSet.AsNoTracking();
+            if (filter != null)
+                query = query.Where(filter);
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+            var totalCount = await query.CountAsync();
+            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return (items, totalCount);
         }
 
         public virtual void Remove(TEntity entity)
@@ -82,23 +104,16 @@ namespace ZeroWeatherAPI.Infrastructure.Repositories
             _dbSet.RemoveRange(entities);
         }
 
-        public virtual async Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return await _dbSet.SingleOrDefaultAsync(predicate);
-        }
-
-        public virtual async Task Update(TEntity entityToUpdate)
+        public void Update(TEntity entityToUpdate)
         {
             _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
-        public virtual async Task UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
+        public void UpdateRange(IEnumerable<TEntity> entitiesToUpdate)
         {
             _dbSet.AttachRange(entitiesToUpdate);
             _context.Entry(entitiesToUpdate).State = EntityState.Modified;
         }
-
-
     }
 }

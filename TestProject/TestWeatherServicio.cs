@@ -1,14 +1,12 @@
 using Moq;
-using ZeroWeatherAPI.Core.Entities;
+using Moq.Protected;
+using System.Net;
+using System.Net.Http.Json;
 using ZeroWeatherAPI.Core.Dtos;
+using ZeroWeatherAPI.Core.Entities;
 using ZeroWeatherAPI.Core.Interfaces;
-using ZeroWeatherAPI.Core.Interfaces.Services;
 using ZeroWeatherAPI.Core.Interfaces.Shared;
 using ZeroWeatherAPI.Services;
-using System.Net.Http.Json;
-using System.Net;
-using System;
-using Moq.Protected;
 
 namespace TestProject
 {
@@ -133,7 +131,7 @@ namespace TestProject
             Mock<IOpenWeatherService> openWeatherService = new Mock<IOpenWeatherService>();
             Mock<HttpMessageHandler> mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
-            unitOfWork.Setup(a => a.WeatherRepository.GetAsync(a => a.Equals(1), null, "", false, 10)).ReturnsAsync(_weathers);
+            unitOfWork.Setup(a => a.WeatherRepository.GetByFilterAsync(a => a.Equals(1), null, "", false, 10)).ReturnsAsync(_weathers);
             unitOfWork.Setup(c => c.CityRepository.GetByIdAsync(1)).ReturnsAsync(_city);
 
             var mockResponse = new HttpResponseMessage

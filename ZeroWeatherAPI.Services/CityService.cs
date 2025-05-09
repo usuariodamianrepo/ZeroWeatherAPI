@@ -16,7 +16,6 @@ namespace ZeroWeatherAPI.Services
         public async Task<City> CreateCity(City newCity)
         {
             CityValidator validator = new();
-            //newCity.InsertDate = DateTime.Now;
 
             var validationResult = await validator.ValidateAsync(newCity);
             if (validationResult.IsValid)
@@ -35,8 +34,6 @@ namespace ZeroWeatherAPI.Services
         public async Task DeleteCity(int cityId)
         {
             City city = await _unitOfWork.CityRepository.GetByIdAsync(cityId);
-            if(city == null)
-                throw new ArgumentException($"The City Id:{cityId} not found.");
 
             _unitOfWork.CityRepository.Remove(city);
             await _unitOfWork.CommitAsync();
@@ -61,10 +58,6 @@ namespace ZeroWeatherAPI.Services
                 throw new ArgumentException(validationResult.Errors.ToString());
 
             City cityToBeUpdated = await _unitOfWork.CityRepository.GetByIdAsync(cityToBeUpdatedId);
-
-            if (cityToBeUpdated == null)
-                throw new ArgumentException("Invalid City ID while updating");
-
             cityToBeUpdated.UpdateAudit();
             cityToBeUpdated.Name = newCityValues.Name;
             cityToBeUpdated.Description = newCityValues.Description;

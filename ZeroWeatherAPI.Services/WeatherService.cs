@@ -38,9 +38,6 @@ namespace ZeroWeatherAPI.Services
         public async Task DeleteWeather(int weatherId)
         {
             Weather Weather = await _unitOfWork.WeatherRepository.GetByIdAsync(weatherId);
-            if (Weather == null)
-                throw new ArgumentException($"The Weather Id:{weatherId} not found.");
-
             _unitOfWork.WeatherRepository.Remove(Weather);
             await _unitOfWork.CommitAsync();
         }
@@ -64,10 +61,6 @@ namespace ZeroWeatherAPI.Services
                 throw new ArgumentException(validationResult.Errors.ToString());
 
             Weather weatherToBeUpdated = await _unitOfWork.WeatherRepository.GetByIdAsync(weatherToBeUpdatedId);
-
-            if (weatherToBeUpdated == null)
-                throw new ArgumentException("Invalid Weather ID while updating");
-
             weatherToBeUpdated.UpdateAudit();
             weatherToBeUpdated.CityId = newWeatherValues.CityId;
             weatherToBeUpdated.CoordLon = newWeatherValues.CoordLon;
@@ -161,7 +154,7 @@ namespace ZeroWeatherAPI.Services
 
         public async Task<IEnumerable<Weather>> GetLastAsync(int id, int take)
         {
-            return await _unitOfWork.WeatherRepository.GetAsync(w => w.CityId == id, q => q.OrderByDescending(l => l.InsertDate), "", false, take);
+            return await _unitOfWork.WeatherRepository.GetByFilterAsync(w => w.CityId == id, q => q.OrderByDescending(l => l.InsertDate), "", false, take);
         }
     }
 }
