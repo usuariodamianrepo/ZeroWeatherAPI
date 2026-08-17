@@ -1,26 +1,23 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using ZeroWeatherAPI.Core.Entities;
 using ZeroWeatherAPI.Web.Dtos;
 
 namespace ZeroWeatherAPI.Web.Mappers
 {
-    public class MappingProfile : Profile
+    public class MappingProfile : IRegister
     {
-        public MappingProfile()
+        public void Register(TypeAdapterConfig config)
         {
-            //Entities to Models
-            CreateMap<City, CitySimpleDto>().PreserveReferences();
-            CreateMap<City, CityDto>().PreserveReferences();
-            CreateMap<Weather, WeatherDto>().PreserveReferences();
-            CreateMap<Weather, WeatherDetailDto>()
-                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(d => d.CityName, opt => opt.MapFrom(src => src.Name))
-                .ForMember(d => d.CountryName, opt => opt.MapFrom(src => src.SysCountry))
-                .ForMember(d => d.Weather, opt => opt.MapFrom(src => src.MainTemp))
-                .ForMember(d => d.ThermalSensation, opt => opt.MapFrom(src => src.MainFeelsLike));
-
-            //Models to Entities
-            CreateMap<CitySaveDto, City>();
+            config.NewConfig<City, CitySimpleDto>().PreserveReference(true);
+            config.NewConfig<City, CityDto>().PreserveReference(true);
+            config.NewConfig<Weather, WeatherDto>().PreserveReference(true);
+            config.NewConfig<Weather, WeatherDetailDto>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.CityName, src => src.Name)
+                .Map(dest => dest.CountryName, src => src.SysCountry)
+                .Map(dest => dest.Weather, src => src.MainTemp)
+                .Map(dest => dest.ThermalSensation, src => src.MainFeelsLike);
+            config.NewConfig<CitySaveDto, City>();
         }
     }
 }

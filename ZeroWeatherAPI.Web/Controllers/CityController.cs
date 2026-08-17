@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ZeroWeatherAPI.Core.Entities;
 using ZeroWeatherAPI.Core.Interfaces.Services;
@@ -11,30 +11,29 @@ namespace ZeroWeatherAPI.Web.Controllers
     public class CityController : ControllerBase
     {
         private readonly ICityService _cityService;
-        private readonly IMapper _mapper;
 
-        public CityController(ICityService cityService, IMapper mapper)
+        public CityController(ICityService cityService)
         {
             _cityService = cityService;
-            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityDto>>> Get()
         {
             var cities = await _cityService.GetAll();
-            var mappedCities = _mapper.Map<IEnumerable<City>, IEnumerable<CityDto>>(cities);
 
-            return Ok(mappedCities);
+            return Ok(cities.Adapt<IEnumerable<CityDto>>());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CityDto>> Get(int id)
         {
-            var city = await _cityService.GetCityById(id);
-            var mappedCity = _mapper.Map<City, CityDto>(city);
+            if (id == 0)
+                return BadRequest("The City Id can not be 0.");
 
-            return Ok(mappedCity);
+            var city = await _cityService.GetCityById(id);
+
+            return Ok(city.Adapt<CityDto>());
         }
 
         [HttpPost]
@@ -42,33 +41,39 @@ namespace ZeroWeatherAPI.Web.Controllers
         {
             try
             {
-                var createdCity = await _cityService.CreateCity(_mapper.Map<CitySaveDto, City>(city));
+                var createdCity = await _cityService.CreateCity(city.Adapt<City>());
 
-                return Ok(_mapper.Map<City, CityDto>(createdCity));
+                return Ok(createdCity.Adapt<CityDto>());
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<CityDto>> Put(int id, [FromBody] CitySaveDto city)
         {
+            if (id == 0)
+                return BadRequest("The City Id can not be 0.");
+
             try
             {
-                var updatedCity = await _cityService.UpdateCity(id, _mapper.Map<CitySaveDto, City>(city));
-                return Ok(_mapper.Map<City, CityDto>(updatedCity));
+                var updatedCity = await _cityService.UpdateCity(id, city.Adapt<City>());
+                return Ok(updatedCity.Adapt<CityDto>());
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<CitySimpleDto>> Delete(int id)
         {
+            if (id == 0)
+                return BadRequest("The City Id can not be 0.");
+
             try
             {
                 await _cityService.DeleteCity(id);
@@ -76,7 +81,7 @@ namespace ZeroWeatherAPI.Web.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
         }
     }

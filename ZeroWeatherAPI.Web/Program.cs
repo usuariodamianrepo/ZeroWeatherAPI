@@ -1,5 +1,5 @@
-﻿using ZeroWeatherAPI.Web.Extensions;
-using ZeroWeatherAPI.Web.Mappers;
+﻿using Mapster;
+using ZeroWeatherAPI.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
+builder.Services.AddMapster();
 builder.Services.AddRepositoryCore();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddCors(options =>
 {
