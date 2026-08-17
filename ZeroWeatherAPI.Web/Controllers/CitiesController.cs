@@ -10,11 +10,11 @@ namespace ZeroWeatherAPI.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CityController : ControllerBase
+    public class CitiesController : ControllerBase
     {
         private readonly ICityService _cityService;
 
-        public CityController(ICityService cityService)
+        public CitiesController(ICityService cityService)
         {
             _cityService = cityService;
         }

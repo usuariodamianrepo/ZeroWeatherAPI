@@ -8,11 +8,11 @@ namespace ZeroWeatherAPI.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WeatherController : ControllerBase
+    public class WeathersController : ControllerBase
     {
         private readonly IWeatherService _weatherService;
 
-        public WeatherController(IWeatherService weatherService)
+        public WeathersController(IWeatherService weatherService)
         {
             _weatherService = weatherService;
         }
@@ -54,6 +54,7 @@ namespace ZeroWeatherAPI.Web.Controllers
             try
             {
                 var updatedWeather = await _weatherService.UpdateWeather(id, Weather.Adapt<Weather>());
+
                 return Ok(updatedWeather.Adapt<WeatherDto>());
             }
             catch (Exception ex)
@@ -69,25 +70,33 @@ namespace ZeroWeatherAPI.Web.Controllers
             return Ok($"The Weather Id:{id} was deleted.");
         }
 
-        [HttpGet("getandsave/")]
-        public async Task<ActionResult<List<WeatherDetailDto>>> GetWeatherAndSaveInfo(int id, bool showHistorical = false, int take = 10)
+        [HttpGet("get-and-save")]
+        public async Task<ActionResult<IEnumerable<WeatherDetailDto>>> GetWeatherAndSaveInfo(int id, bool showHistorical = false, int take = 10)
         {
             if (id == 0)
                 return BadRequest("The City Id can not be 0. Select one City.");
 
-            List<Weather> weathers = new List<Weather>();
-
-            var weather = await _weatherService.GetWeatherAndSaveInfo(id, take);
-            weathers.Add(weather);
-
-            if (showHistorical)
+            try
             {
-                weathers.Clear();
-                var historical = await _weatherService.GetLastAsync(id, take);
-                weathers.AddRange(historical);
+                List<Weather> weathers = new();
+
+                var weather = await _weatherService.GetWeatherAndSaveInfo(id, take);
+                weathers.Add(weather);
+
+                if (showHistorical)
+                {
+                    weathers.Clear();
+                    var historical = await _weatherService.GetLastAsync(id, take);
+                    weathers.AddRange(historical);
+                }
+
+                return Ok(weathers.Adapt<IEnumerable<WeatherDetailDto>>());
+            }
+            catch (Exception ex)
+            {
+                return Conflict("Error trying to save.");
             }
 
-            return Ok(weathers.Adapt<IEnumerable<WeatherDetailDto>>());
         }
     }
 }

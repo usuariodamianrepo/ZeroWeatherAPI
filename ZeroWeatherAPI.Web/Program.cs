@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddMapster();
 builder.Services.AddRepositoryCore();
+builder.Services.AddServiceCore();
 
 builder.Services.AddCors(options =>
 {

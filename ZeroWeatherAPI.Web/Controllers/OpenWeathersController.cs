@@ -6,23 +6,23 @@ namespace ZeroWeatherAPI.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OpenWeatherController : ControllerBase
+    public class OpenWeathersController : ControllerBase
     {
         private readonly IOpenWeatherService _openWeatherService;
 
-        public OpenWeatherController(IOpenWeatherService openWeatherService)
+        public OpenWeathersController(IOpenWeatherService openWeatherService)
         {
             _openWeatherService = openWeatherService;
         }
 
-        [HttpGet("ByLatLon/")]
+        [HttpGet("by-lat-lon")]
         public async Task<Root> Get(decimal latitude, decimal longitude)
         {
             Root result = await _openWeatherService.GetWeatherAsync(latitude, longitude);
             return result;
         }
 
-        [HttpGet("ByCityCountry/")]
+        [HttpGet("by-city-country")]
         public async Task<Root> Get(string city, string country)
         {
             Root result = await _openWeatherService.GetWeatherAsync(city, country);

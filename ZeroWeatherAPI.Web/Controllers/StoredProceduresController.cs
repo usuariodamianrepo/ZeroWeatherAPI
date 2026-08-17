@@ -6,11 +6,11 @@ namespace ZeroWeatherAPI.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StoredProcedureController : ControllerBase
+    public class StoredProceduresController : ControllerBase
     {
         private readonly IStoredProcedureService _storedProcedureService;
 
-        public StoredProcedureController(IStoredProcedureService storedProcedureService)
+        public StoredProceduresController(IStoredProcedureService storedProcedureService)
         {
             _storedProcedureService = storedProcedureService;
         }
