@@ -1,8 +1,10 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.Intrinsics.Arm;
 using ZeroWeatherAPI.Core.Entities;
 using ZeroWeatherAPI.Core.Interfaces.Services;
 using ZeroWeatherAPI.Web.Dtos;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ZeroWeatherAPI.Web.Controllers
 {
@@ -47,7 +49,7 @@ namespace ZeroWeatherAPI.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Conflict(ex.Message);
+                return Conflict("Error trying to save.");
             }
         }
 
@@ -64,7 +66,7 @@ namespace ZeroWeatherAPI.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Conflict(ex.Message);
+                return Conflict("Error trying to save.");
             }
         }
 
@@ -81,7 +83,7 @@ namespace ZeroWeatherAPI.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Conflict(ex.Message);
+                return Conflict("Error trying to save.");
             }
         }
     }

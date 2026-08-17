@@ -21,7 +21,7 @@ namespace ZeroWeatherAPI.Infrastructure.Services
             try
             {
                 if (string.IsNullOrEmpty(_urlSettings.OpenWeatherApiKey))
-                    throw new Exception("The Api key is null or empty.");
+                    throw new ArgumentException("The Api key is null or empty.");
 
                 string url = $"{_httpClient.BaseAddress}?lat={latitude}&lon={longitude}&appid={_urlSettings.OpenWeatherApiKey}";
 
@@ -35,7 +35,7 @@ namespace ZeroWeatherAPI.Infrastructure.Services
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"Error when it gets Request from OpenWeatherUrl. {ex.Message}");
+                throw new ArgumentException($"Error when it gets Request from OpenWeatherUrl.");
             }
         }
 
@@ -44,13 +44,13 @@ namespace ZeroWeatherAPI.Infrastructure.Services
             try
             {
                 if (string.IsNullOrEmpty(city))
-                    throw new Exception("The city is null or empty.");
+                    throw new ArgumentException("The city is null or empty.");
                 
                 if (string.IsNullOrEmpty(country))
-                    throw new Exception("The country is null or empty.");
+                    throw new ArgumentException("The country is null or empty.");
 
                 if (string.IsNullOrEmpty(_urlSettings.OpenWeatherApiKey))
-                    throw new Exception("The Api key is null or empty.");
+                    throw new ArgumentException("The Api key is null or empty.");
 
                 string url = $"{_httpClient.BaseAddress}?q={city},{country}&appid={_urlSettings.OpenWeatherApiKey}";
 
@@ -64,7 +64,7 @@ namespace ZeroWeatherAPI.Infrastructure.Services
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"Error when it gets Request from OpenWeatherUrl. {ex.Message}");
+                throw new ArgumentException($"Error when it gets Request from OpenWeatherUrl.");
             }
         }
     }

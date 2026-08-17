@@ -44,7 +44,7 @@ namespace ZeroWeatherAPI.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Conflict(ex.Message);
+                return Conflict("Error trying to save.");
             }
         }
 
@@ -58,7 +58,7 @@ namespace ZeroWeatherAPI.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Conflict(ex.Message);
+                return Conflict("Error trying to save.");
             }
         }
 
