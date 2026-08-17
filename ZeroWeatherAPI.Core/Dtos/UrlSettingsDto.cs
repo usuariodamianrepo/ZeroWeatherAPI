@@ -1,6 +1,6 @@
 ﻿namespace ZeroWeatherAPI.Core.Dtos
 {
-    public record UrlSettings
+    public record UrlSettingsDto
     {
         public string? OpenWeatherApiKey { get; set; }
     }

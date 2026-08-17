@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using ZeroWeatherAPI.Core.Dtos;
 using ZeroWeatherAPI.Core.Interfaces;
@@ -38,7 +37,7 @@ namespace ZeroWeatherAPI.Web.Extensions
         public static void AddSharedInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             var url = configuration.GetSection("UrlSettings");
-            services.Configure<UrlSettings>(url);
+            services.Configure<UrlSettingsDto>(url);
 
             // Clientes con tipo IHttpClientFactory
             services.AddHttpClient<IOpenWeatherService, OpenWeatherService>(httpClient =>

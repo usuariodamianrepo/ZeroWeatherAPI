@@ -7,10 +7,10 @@ namespace ZeroWeatherAPI.Infrastructure.Services
 {
     public class OpenWeatherService : IOpenWeatherService
     {
-        public UrlSettings _urlSettings { get; }
+        public UrlSettingsDto _urlSettings { get; }
         private readonly HttpClient _httpClient;
 
-        public OpenWeatherService(IOptions<UrlSettings> urlSettings, HttpClient httpClient)
+        public OpenWeatherService(IOptions<UrlSettingsDto> urlSettings, HttpClient httpClient)
         {
             _urlSettings = urlSettings.Value;
             _httpClient = httpClient;
